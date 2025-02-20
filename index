@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta de Amarração</title>
+  <link rel="manifest" href="./manifest.json">
+  <style>
+    /* Estilos do seu app aqui */
+    * {
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      height: 100vh;
+    }
+    .container {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      max-width: 90%;
+      padding: 30px;
+      text-align: center;
+    }
+    select {
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Consulta de Amarração</h1>
+    <select id="categoria" onchange="carregarMarcas()" disabled>
+      <option value="">Carregando categorias...</option>
+    </select>
+    <select id="marca" onchange="mostrarAmarracao()" disabled>
+      <option value="">Selecione a Marca</option>
+    </select>
+    <div class="result" id="amarracao"></div>
+  </div>
+
+  <script>
+    const URL_API = "https://script.google.com/macros/s/AKfycbzYlvPcsngYZzTfLgmheYylYE3THl8_X-Rk793XyOqwEdLs-eHpTk9cLpn6V3DkfX_j/exec"; // Cole aqui a URL do Apps Script
+
+    let dados = [];
+
+    async function carregarDados() {
+      try {
+        const response = await fetch(URL_API);
+        const json = await response.json();
+
+        if (!Array.isArray(json) || json.length === 0) {
+          alert("Nenhum dado encontrado ou erro na API.");
+          return;
+        }
+
+        dados = json;
+        const categorias = [...new Set(dados.map(item => item.categoria).filter(Boolean))];
+
+        const categoriaSelect = document.getElementById('categoria');
+        categoriaSelect.innerHTML = '<option value=\"\">Selecione a Categoria</option>';
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categoriaSelect.appendChild(option);
+        });
+        categoriaSelect.disabled = false;
+      } catch (erro) {
+        console.error("Erro ao carregar dados da API:", erro);
+        alert("Falha ao carregar dados da planilha.");
+      }
+    }
+
+    function carregarMarcas() {
+      const categoriaSelecionada = document.getElementById('categoria').value;
+      const marcaSelect = document.getElementById('marca');
+      marcaSelect.innerHTML = '<option value=\"\">Selecione a Marca</option>';
+      document.getElementById('amarracao').textContent = '';
+
+      if (categoriaSelecionada) {
+        const marcas = dados
+          .filter(item => item.categoria === categoriaSelecionada)
+          .map(item => item.marca)
+          .filter(Boolean);
+
+        marcas.forEach(marca => {
+          const option = document.createElement('option');
+          option.value = marca;
+          option.textContent = marca;
+          marcaSelect.appendChild(option);
+        });
+        marcaSelect.disabled = false;
+      } else {
+        marcaSelect.disabled = true;
+      }
+    }
+
+    function mostrarAmarracao() {
+      const categoria = document.getElementById('categoria').value;
+      const marca = document.getElementById('marca').value;
+      const resultado = dados.find(item => item.categoria === categoria && item.marca === marca);
+      document.getElementById('amarracao').textContent = resultado
+        ? `Amarração: ${resultado.amarracao}`
+        : 'Amarração não encontrada.';
+    }
+
+    // Iniciar o carregamento dos dados ao abrir
+    document.addEventListener('DOMContentLoaded', carregarDados);
+
+    // Registrar o Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('./sw.js')
+        .then(() => console.log('Service Worker registrado!'))
+        .catch(err => console.error('Erro ao registrar Service Worker:', err));
+    }
+  </script>
+</body>
+</html>
