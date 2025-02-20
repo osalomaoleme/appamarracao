@@ -6,7 +6,6 @@
   <title>Consulta de Amarração</title>
   <link rel="manifest" href="./manifest.json">
   <style>
-    /* Estilos do seu app aqui */
     * {
       box-sizing: border-box;
       font-family: 'Arial', sans-serif;
@@ -17,31 +16,53 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f5f5f5;
+      /* Cor de fundo do app */
+      background: #0d283d;
       height: 100vh;
     }
     .container {
-      background-color: #fff;
+      /* Fundo levemente translúcido, deixando o #0d283d aparecer */
+      background-color: rgba(255, 255, 255, 0.2);
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       width: 400px;
       max-width: 90%;
       padding: 30px;
       text-align: center;
+      /* Deixar texto em branco dentro do container */
+      color: #fff;
+    }
+    h1 {
+      margin-bottom: 20px;
     }
     select {
       width: 100%;
       margin-top: 10px;
       padding: 12px;
-      border: 1px solid #ccc;
+      /* Fundo transparente para o select */
+      background-color: transparent;
+      /* Borda clara para destacar no fundo escuro */
+      border: 1px solid #fff;
       border-radius: 8px;
       font-size: 1rem;
+      color: #fff;
+      /* Remove a seta padrão do select no Chrome/Safari (opcional) */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: none; 
+    }
+    /* As opções do dropdown também ficam com fundo transparente;
+       dependendo do navegador, pode ser que não fique 100% transparente,
+       pois alguns sistemas forçam estilo nativo. */
+    select option {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
     .result {
       margin-top: 20px;
       font-size: 1.2rem;
       font-weight: bold;
-      color: #2c3e50;
+      color: #fff; /* Ajustado para combinar com fundo escuro */
     }
   </style>
 </head>
@@ -58,7 +79,7 @@
   </div>
 
   <script>
-    const URL_API = "https://script.google.com/macros/s/AKfycbzYlvPcsngYZzTfLgmheYylYE3THl8_X-Rk793XyOqwEdLs-eHpTk9cLpn6V3DkfX_j/exec"; // Cole aqui a URL do Apps Script
+    const URL_API = "https://script.google.com/macros/s/AKfycbzYlvPcsngYZzTfLgmheYylYE3THl8_X-Rk793XyOqwEdLs-eHpTk9cLpn6V3DkfX_j/exec";
 
     let dados = [];
 
@@ -123,7 +144,6 @@
         : 'Amarração não encontrada.';
     }
 
-    // Iniciar o carregamento dos dados ao abrir
     document.addEventListener('DOMContentLoaded', carregarDados);
 
     // Registrar o Service Worker
