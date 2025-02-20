@@ -12,25 +12,25 @@
       margin: 0;
       padding: 0;
     }
+    /* Fundo do app */
     body {
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Cor de fundo do app */
-      background: #0d283d;
+      background-color: #0d283d;
       height: 100vh;
     }
+    /* Container branco */
     .container {
-      /* Fundo levemente translúcido, deixando o #0d283d aparecer */
-      background-color: rgba(255, 255, 255, 0.2);
+      background-color: #fff;
       border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
       width: 400px;
       max-width: 90%;
       padding: 30px;
       text-align: center;
-      /* Deixar texto em branco dentro do container */
-      color: #fff;
+      /* Texto interno na cor #0d283d */
+      color: #0d283d;
     }
     h1 {
       margin-bottom: 20px;
@@ -39,30 +39,19 @@
       width: 100%;
       margin-top: 10px;
       padding: 12px;
-      /* Fundo transparente para o select */
-      background-color: transparent;
-      /* Borda clara para destacar no fundo escuro */
-      border: 1px solid #fff;
+      border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
-      color: #fff;
-      /* Remove a seta padrão do select no Chrome/Safari (opcional) */
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image: none; 
-    }
-    /* As opções do dropdown também ficam com fundo transparente;
-       dependendo do navegador, pode ser que não fique 100% transparente,
-       pois alguns sistemas forçam estilo nativo. */
-    select option {
-      background-color: rgba(255, 255, 255, 0.1);
-      color: #fff;
+      /* Cor do texto dos selects */
+      color: #0d283d;
+      /* Fundo branco */
+      background-color: #fff;
     }
     .result {
       margin-top: 20px;
       font-size: 1.2rem;
       font-weight: bold;
-      color: #fff; /* Ajustado para combinar com fundo escuro */
+      color: #0d283d;
     }
   </style>
 </head>
@@ -146,7 +135,6 @@
 
     document.addEventListener('DOMContentLoaded', carregarDados);
 
-    // Registrar o Service Worker
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register('./sw.js')
